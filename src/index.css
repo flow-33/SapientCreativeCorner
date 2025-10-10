@@ -1,0 +1,95 @@
+:root {
+  --font-brand: 'Futura Next', 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --c-bg: #0b0c10;
+  --c-fg: #e5e7eb;
+  --c-panel: #111827;
+  --c-border: #1f2937;
+  --c-panel-hover: #0f172a;
+}
+
+body {
+  font-family: var(--font-brand);
+  margin: 0;
+  padding: 0;
+  background: var(--c-bg);
+  color: var(--c-fg);
+}
+
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* No top header; launcher is the home */
+
+.vo-main { display: flex; flex: 1; position: relative; min-height: 100vh; }
+
+.vo-launcher { display: block; width: 100%; height: 100%; min-height: 100vh; position: relative; background: radial-gradient(1200px circle at 55% 50%, #111111 0%, #222222 100%); }
+.vo-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; color: #e5e7eb; cursor: pointer; }
+.vo-tile:hover { background: #0f172a; }
+.vo-tile-icon { font-size: 32px; }
+.vo-tile-title { font-weight: 600; }
+
+/* Background image for home */
+/* Removed ::before background; using direct background on .vo-launcher for reliability in file:// */
+
+/* Left-side circle buttons */
+.vo-left-buttons { position: absolute; left: 40px; top: 80px; display: flex; flex-direction: column; gap: 60px; z-index: 3; }
+/* Gradient ring buttons inspired by Figma design */
+.vo-circle { width: 120px; height: 120px; border-radius: 9999px; background: transparent; color: #e5e7eb; cursor: pointer; position: relative; border: none; }
+.vo-circle::before { content: ""; position: absolute; inset: 0; padding: 8px; border-radius: inherit; background: conic-gradient(#ef4444, #f97316, #ef4444); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.vo-circle.alt::before { background: conic-gradient(#3b82f6, #8b5cf6, #3b82f6); }
+.vo-circle span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px; background: rgba(0,0,0,0.25); border-radius: inherit; font-family: var(--font-brand); -webkit-font-smoothing: antialiased; }
+.vo-collection-header { margin-left: 200px; font-size: 24px; font-weight: 600; padding: 24px 0 8px 0; position: relative; z-index: 2; font-family: var(--font-brand); }
+.vo-gallery-grid { margin-left: 200px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; padding: 0 24px 24px 0; position: relative; z-index: 2; }
+
+/* Back Home control */
+.vo-back { position: absolute; left: 24px; top: 24px; z-index: 4; display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 9999px; background: rgba(0,0,0,0.4); border: 1px solid #374151; color: #e5e7eb; cursor: pointer; }
+.vo-back:hover { background: rgba(0,0,0,0.6); }
+.vo-back svg { width: 18px; height: 18px; }
+
+/* Modular card styling */
+.vo-card { --card-bg: var(--c-panel); --card-border: var(--c-border); --card-hover: var(--c-panel-hover); --thumb-ratio: calc(56.25% * 1.6); }
+.vo-card { height: 100%; display: flex; flex-direction: column; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; cursor: pointer; text-align: left; transition: background 150ms ease, transform 150ms ease; }
+.vo-card:hover { background: var(--card-hover); transform: translateY(-2px); }
+.vo-card-thumb { background-size: cover; background-position: center; position: relative; }
+.vo-card-thumb::before { content: ""; display: block; padding-top: var(--thumb-ratio); }
+.vo-card-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 150ms ease; }
+.vo-card:hover .vo-card-overlay { opacity: 1; }
+.vo-cta { padding: 10px 14px; border-radius: 8px; font-weight: 600; border: 1px solid #e5e7eb; background: #ffffff; color: #111827; }
+.vo-cta.secondary { background: transparent; color: #e5e7eb; border-color: #e5e7eb; }
+.vo-card-meta { padding: 12px; display: grid; gap: 6px; }
+.vo-card-title { color:#fff; font-weight: 600; font-size: 14px; font-family: var(--font-brand); }
+.vo-card-sub { color: #9ca3af; font-size: 12px;  }
+.vo-card-desc { color: #cbd5e1; font-size: 12px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Optional custom brand font (drop file at src/fonts/creative-corner.woff2) */
+@font-face {
+  font-family: 'Futura Next';
+  src: url('./fonts/creative-corner.woff2') format('woff2');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+.brand-font { font-family: 'Futura Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+/* Centered logo image */
+.vo-logo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 520px; width: 40vw; height: auto; z-index: 1; pointer-events: none; opacity: 0.95; }
+.vo-card { display: flex; flex-direction: column; background: #111827; border: 1px solid #1f2937; border-radius: 12px; overflow: hidden; cursor: pointer; text-align: left; }
+.vo-card:hover { background: #0f172a; }
+.vo-card-thumb { background-size: cover; background-position: center; aspect-ratio: 16/9; }
+.vo-card-meta { padding: 12px; }
+.vo-card-title { font-weight: 600; }
+.vo-card-sub { color: #9ca3af; font-size: 12px; margin-top: 4px; }
+
+.vo-viewport { display: flex; flex-direction: column; width: 100%; }
+.vo-appbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: #0f172a; border-bottom: 1px solid #1f2937; }
+.vo-appname { font-weight: 600; }
+.vo-appbar-actions { display: flex; gap: 8px; }
+
+.vo-content { position: relative; display: grid; grid-template-columns: 1fr 0; transition: grid-template-columns 200ms ease; height: calc(100vh - 96px); }
+.vo-content.drawer-open { grid-template-columns: 1fr 360px; }
+.vo-frame { width: 100%; height: 100%; border: none; background: #0b0c10; }
+.vo-fail { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 14px 18px; z-index: 5; }
+.vo-drawer { overflow: auto; border-left: 1px solid #1f2937; background: #0b0c10; }
+.vo-drawer-header { position: sticky; top: 0; background: #0f172a; border-bottom: 1px solid #1f2937; padding: 12px 16px; font-weight: 600; }
+.vo-drawer-content { padding: 12px 16px; }
+
+.hidden { display: none; }

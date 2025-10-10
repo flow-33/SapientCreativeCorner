@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Virtual OS</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="app">
+      <main class="vo-main">
+        <section id="launcher" class="vo-launcher" role="list">
+          <img id="cc-logo" class="vo-logo" src="./assets/CCLogo.png" alt="Creative Corner logo" />
+          <!-- Launcher content is injected by renderer.js (left-side buttons and/or gallery) -->
+        </section>
+
+        <section id="app-viewport" class="vo-viewport hidden" aria-live="polite">
+          <div class="vo-appbar">
+            <div id="app-name" class="vo-appname">Portfolio</div>
+            <div class="vo-appbar-actions">
+              <button id="btn-toggle-drawer" class="vo-button">Details</button>
+              <button id="btn-exit-app" class="vo-button">Exit</button>
+            </div>
+          </div>
+          <div class="vo-content">
+            <iframe id="portfolio-frame" title="Portfolio" class="vo-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-pointer-lock allow-downloads allow-top-navigation-by-user-activation"></iframe>
+            <aside id="drawer" class="vo-drawer" aria-hidden="true">
+              <div class="vo-drawer-header">About this project</div>
+              <div id="drawer-content" class="vo-drawer-content"></div>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="config.js"></script>
+    <script src="renderer.js"></script>
+  </body>
+</html>
