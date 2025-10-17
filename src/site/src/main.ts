@@ -181,9 +181,16 @@ function addLeftButtons() {
   console.log('Left buttons added:', buttons);
   launcher.addEventListener('click', (e) => {
     console.log('Launcher clicked:', e.target);
+    console.log('Event target tagName:', (e.target as HTMLElement).tagName);
+    console.log('Event target className:', (e.target as HTMLElement).className);
     const b = (e.target as HTMLElement).closest('[data-collection]') as HTMLElement | null;
     console.log('Found button:', b, 'Collection:', b?.getAttribute('data-collection'));
-    if (!b) return;
+    if (!b) {
+      console.log('No button found, checking all data-collection elements:');
+      const allButtons = launcher.querySelectorAll('[data-collection]');
+      console.log('All buttons found:', allButtons.length, allButtons);
+      return;
+    }
     showCollection(b.getAttribute('data-collection') as 'portfolio' | 'experiments');
   });
 }
