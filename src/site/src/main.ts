@@ -42,35 +42,8 @@ function openLauncher() {
 
 function openPortfolio(project: { url: string; title?: string; details?: string }) {
   const { url, title, details } = project;
-  byId<HTMLDivElement>('app-name').textContent = title || 'Portfolio';
-  drawerContent.innerHTML = details || '';
-  frame.src = url;
-  launcher.classList.add('hidden');
-  viewport.classList.remove('hidden');
-
-  const failNoticeId = 'vo-load-fail';
-  let cleared = false;
-  const showFail = () => {
-    if (cleared) return;
-    let notice = document.getElementById(failNoticeId);
-    if (!notice) {
-      notice = document.createElement('div');
-      notice.id = failNoticeId;
-      notice.className = 'vo-fail';
-      notice.innerHTML = `<div style="display:grid;gap:8px;text-align:center">
-          <div style="font-weight:600">This site may block embedding in an app</div>
-          <a href="${url}" target="_blank" rel="noopener" class="vo-cta" style="justify-self:center">Open in browser</a>
-        </div>`;
-      viewport.appendChild(notice);
-    }
-  };
-  const timer = window.setTimeout(showFail, 3000);
-  frame.addEventListener('load', () => {
-    cleared = true;
-    window.clearTimeout(timer);
-    const existing = document.getElementById(failNoticeId);
-    if (existing) existing.remove();
-  }, { once: true });
+  // Navigate to URL in same tab
+  window.location.href = url;
 }
 
 function getThumbnail(item: any): string {
@@ -137,9 +110,8 @@ function renderGallery(items: any[]) {
       const actionEl = (e.target as HTMLElement).closest('[data-action]') as HTMLElement | null;
       const action = actionEl ? actionEl.getAttribute('data-action') : 'launch';
       if (action === 'overview') {
-        drawerContent.innerHTML = item.details || '';
-        content.classList.add('drawer-open');
-        drawer.setAttribute('aria-hidden', 'false');
+        // Show details in a modal or alert for now
+        alert(item.details || 'No details available');
       } else {
         openPortfolio({ url: item.link || item.url, title: item.title, details: item.details });
       }
