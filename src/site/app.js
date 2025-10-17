@@ -18,11 +18,22 @@
     content.classList.remove('drawer-open');
     drawer.setAttribute('aria-hidden', 'true');
     frame.src = '';
-    // Rebuild launcher content: keep logo and add buttons
+    // Rebuild launcher content: keep logo and add buttons, but preserve animated background
     if (logo && logo.parentElement !== launcher) {
       launcher.appendChild(logo);
     }
-    launcher.replaceChildren(logo);
+    
+    // Remove only interactive elements, keep animated background
+    const interactiveElements = launcher.querySelectorAll('.vo-left-buttons, .vo-gallery-grid, .vo-collection-header, .vo-back');
+    interactiveElements.forEach(el => el.remove());
+    
+    // Ensure logo is at the top
+    if (logo.parentElement !== launcher) {
+      launcher.appendChild(logo);
+    } else {
+      launcher.insertBefore(logo, launcher.firstChild);
+    }
+    
     addLeftButtons();
   }
 
@@ -168,8 +179,10 @@
     if (items.length && items[0].type) {
       items = items.filter((it) => (kind === 'portfolio' ? it.type === 'Client Work' : it.type === 'Experiment'));
     }
-    // Reuse viewport drawer and iframe; replace launcher with gallery
-    launcher.replaceChildren();
+    // Reuse viewport drawer and iframe; replace launcher with gallery, but preserve animated background
+    const interactiveElements = launcher.querySelectorAll('.vo-left-buttons, .vo-gallery-grid, .vo-collection-header, .vo-back');
+    interactiveElements.forEach(el => el.remove());
+    
     // Back home control
     const back = document.createElement('button');
     back.className = 'vo-back';
@@ -200,9 +213,14 @@
     });
   }
 
-  // Create animated background
+  // Create animated background (only once)
   function createAnimatedBackground() {
     const launcher = document.getElementById('launcher');
+    
+    // Check if background already exists
+    if (launcher.querySelector('.vo-bg-circle')) {
+      return;
+    }
     
     // Create animated circles
     const circles = [
