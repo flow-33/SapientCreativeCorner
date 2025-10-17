@@ -30,7 +30,7 @@ body {
 .vo-tile-icon { font-size: 32px; }
 .vo-tile-title { font-weight: 600; }
 
-.vo-left-buttons { position: absolute; left: 40px; top: 80px; display: flex; flex-direction: column; gap: 60px; z-index: 3; }
+.vo-left-buttons { position: absolute; left: 40px; top: 80px; display: flex; flex-direction: column; gap: 60px; z-index: 5; }
 .vo-circle { width: 120px; height: 120px; border-radius: 9999px; background: transparent; color: #e5e7eb; cursor: pointer; position: relative; border: none; }
 .vo-circle::before { content: ""; position: absolute; inset: 0; padding: 8px; border-radius: inherit; background: conic-gradient(#ef4444, #f97316, #ef4444); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
 .vo-circle.alt::before { background: conic-gradient(#3b82f6, #8b5cf6, #3b82f6); }

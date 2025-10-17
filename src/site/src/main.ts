@@ -170,6 +170,7 @@ async function showCollection(kind: 'portfolio' | 'experiments') {
 }
 
 function addLeftButtons() {
+  console.log('Adding left buttons...');
   const buttons = document.createElement('div');
   buttons.className = 'vo-left-buttons';
   buttons.innerHTML = `
@@ -177,8 +178,11 @@ function addLeftButtons() {
       <button class="vo-circle alt" data-collection="experiments"><span>Experiments</span></button>
     `;
   launcher.appendChild(buttons);
+  console.log('Left buttons added:', buttons);
   launcher.addEventListener('click', (e) => {
+    console.log('Launcher clicked:', e.target);
     const b = (e.target as HTMLElement).closest('[data-collection]') as HTMLElement | null;
+    console.log('Found button:', b, 'Collection:', b?.getAttribute('data-collection'));
     if (!b) return;
     showCollection(b.getAttribute('data-collection') as 'portfolio' | 'experiments');
   });
