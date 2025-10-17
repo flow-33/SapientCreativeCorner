@@ -200,7 +200,67 @@
     });
   }
 
+  // Create animated background
+  function createAnimatedBackground() {
+    const launcher = document.getElementById('launcher');
+    
+    // Create animated circles
+    const circles = [
+      { class: 'vo-circle-small', delay: 0 },
+      { class: 'vo-circle-medium', delay: 0.3 },
+      { class: 'vo-circle-large', delay: 0.6 },
+      { class: 'vo-circle-xlarge', delay: 0.9 },
+      { class: 'vo-circle-xxlarge', delay: 1.2 }
+    ];
+    
+    circles.forEach(circle => {
+      const circleEl = document.createElement('div');
+      circleEl.className = `vo-bg-circle ${circle.class}`;
+      circleEl.style.animationDelay = `${circle.delay}s`;
+      launcher.appendChild(circleEl);
+    });
+    
+    // Add noise overlay
+    const noise = document.createElement('div');
+    noise.className = 'vo-noise';
+    launcher.appendChild(noise);
+  }
+
+  // Create animation controls
+  function createControls() {
+    const panel = document.createElement('div');
+    panel.className = 'vo-controls';
+    panel.innerHTML = `
+      <h4>Background Waves</h4>
+      <div class="row"><label>Brightness</label><input id="ctl-bright" type="range" min="0" max="2" step="0.01" value="1"><output id="out-bright">1.00</output></div>
+      <div class="row"><label>Base</label><input id="ctl-base" type="range" min="0" max="2" step="0.01" value="1"><output id="out-base">1.00</output></div>
+      <div class="row"><label>Opacity</label><input id="ctl-opacity" type="range" min="0" max="1" step="0.01" value="1"><output id="out-opacity">1.00</output></div>
+      <div class="row"><label>Noise</label><input id="ctl-noise" type="range" min="0" max="0.2" step="0.005" value="0.03"><output id="out-noise">0.03</output></div>
+    `;
+    document.body.appendChild(panel);
+
+    const controls = [
+      { input: panel.querySelector('#ctl-bright'), out: panel.querySelector('#out-bright'), varName: '--vo-brightness' },
+      { input: panel.querySelector('#ctl-base'), out: panel.querySelector('#out-base'), varName: '--vo-base-scale' },
+      { input: panel.querySelector('#ctl-opacity'), out: panel.querySelector('#out-opacity'), varName: '--vo-circle-opacity' },
+      { input: panel.querySelector('#ctl-noise'), out: panel.querySelector('#out-noise'), varName: '--vo-noise' },
+    ];
+
+    const rootStyle = document.documentElement.style;
+    for (const { input, out, varName } of controls) {
+      const apply = () => {
+        const val = Number(input.value);
+        rootStyle.setProperty(varName, String(val));
+        out.value = val.toFixed(2);
+      };
+      input.addEventListener('input', apply);
+      apply();
+    }
+  }
+
   // Start at launcher
   openLauncher();
   addLeftButtons();
+  createAnimatedBackground();
+  createControls(); // Uncomment this line to show controls
 })();
