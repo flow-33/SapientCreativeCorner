@@ -11,7 +11,8 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "build-site": "node build-site.js",
-    "serve-site": "cd docs && python -m http.server 8000"
+    "serve-site": "cd docs && python -m http.server 8000",
+    "serve-site-direct": "cd src/site && python -m http.server 8000"
   },
   "keywords": [],
   "author": "flofourn",
