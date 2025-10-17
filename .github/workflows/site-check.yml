@@ -1,0 +1,41 @@
+name: Site Check
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/site/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/site/**'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Check site structure
+      run: |
+        echo "Checking site folder structure..."
+        ls -la src/site/
+        echo "Checking for required files..."
+        test -f src/site/index.html && echo "✓ index.html found" || echo "✗ index.html missing"
+        test -f src/site/app.css && echo "✓ app.css found" || echo "✗ app.css missing"
+        test -f src/site/app.js && echo "✓ app.js found" || echo "✗ app.js missing"
+        test -f src/site/app-config.js && echo "✓ app-config.js found" || echo "✗ app-config.js missing"
+        test -d src/site/api && echo "✓ api directory found" || echo "✗ api directory missing"
+        test -d src/site/assets && echo "✓ assets directory found" || echo "✗ assets directory missing"
+        
+    - name: Validate JSON files
+      run: |
+        echo "Validating JSON files..."
+        for file in src/site/api/*.json; do
+          if [ -f "$file" ]; then
+            echo "Validating $file..."
+            python3 -m json.tool "$file" > /dev/null && echo "✓ $file is valid JSON" || echo "✗ $file has invalid JSON"
+          fi
+        done

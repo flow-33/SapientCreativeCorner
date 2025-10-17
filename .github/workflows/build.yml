@@ -27,14 +27,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        working-directory: VirtualOS
 
       - name: Make installers
         run: npm run make
-        working-directory: VirtualOS
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: installers-${{ runner.os }}
-          path: VirtualOS/out/make/**
+          path: out/make/**
