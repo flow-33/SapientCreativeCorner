@@ -21,7 +21,7 @@ body {
 
 .vo-main { display: flex; flex: 1; position: relative; min-height: 100vh; }
 
-.vo-launcher { display: block; width: 100%; height: 100%; min-height: 100vh; position: relative; background: radial-gradient(1200px circle at 55% 50%, #111111 0%, #222222 100%); }
+.vo-launcher { display: block; width: 100%; height: 100%; min-height: 100vh; position: relative; background: radial-gradient(1200px circle at 55% 50%, #111111 0%, #222222 100%), url('./assets/creative-corner-bg.png'); background-size: cover; background-position: center; background-blend-mode: overlay; }
 .vo-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; color: #e5e7eb; cursor: pointer; }
 .vo-tile:hover { background: #0f172a; }
 .vo-tile-icon { font-size: 32px; }
@@ -33,7 +33,8 @@ body {
 /* Left-side circle buttons */
 .vo-left-buttons { position: absolute; left: 40px; top: 80px; display: flex; flex-direction: column; gap: 60px; z-index: 3; }
 /* Gradient ring buttons inspired by Figma design */
-.vo-circle { width: 120px; height: 120px; border-radius: 9999px; background: transparent; color: #e5e7eb; cursor: pointer; position: relative; border: none; }
+.vo-circle { width: 120px; height: 120px; border-radius: 9999px; background: transparent; color: #e5e7eb; cursor: pointer; position: relative; border: none; transition: transform 0.3s ease; }
+.vo-circle:hover { transform: scale(1.05); }
 .vo-circle::before { content: ""; position: absolute; inset: 0; padding: 8px; border-radius: inherit; background: conic-gradient(#ef4444, #f97316, #ef4444); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
 .vo-circle.alt::before { background: conic-gradient(#3b82f6, #8b5cf6, #3b82f6); }
 .vo-circle span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px; background: rgba(0,0,0,0.25); border-radius: inherit; font-family: var(--font-brand); -webkit-font-smoothing: antialiased; }
@@ -71,7 +72,7 @@ body {
 .brand-font { font-family: 'Futura Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
 
 /* Centered logo image */
-.vo-logo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 520px; width: 40vw; height: auto; z-index: 1; pointer-events: none; opacity: 0.95; }
+.vo-logo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 520px; width: 40vw; height: auto; z-index: 1; pointer-events: none; opacity: 0.95; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
 .vo-card { display: flex; flex-direction: column; background: #111827; border: 1px solid #1f2937; border-radius: 12px; overflow: hidden; cursor: pointer; text-align: left; }
 .vo-card:hover { background: #0f172a; }
 .vo-card-thumb { background-size: cover; background-position: center; aspect-ratio: 16/9; }
