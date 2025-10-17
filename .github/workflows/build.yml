@@ -3,6 +3,11 @@ name: Build Desktop Installers
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'forge.config.js'
+      - '!src/site/**'
   workflow_dispatch:
 
 jobs:
