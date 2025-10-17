@@ -1,27 +1,24 @@
-// Configuration
-const REFRESH_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
-const DATA_SOURCES = {
-  portfolio: './api/data.json',
-  experiments: './api/data.json'
-};
+import './styles.css';
 
-function byId(id) {
+import { REFRESH_INTERVAL_MS, DATA_SOURCES } from './vo-config';
+
+function byId<T extends HTMLElement>(id: string): T {
   const el = document.getElementById(id);
   if (!el) throw new Error(`Missing element #${id}`);
-  return el;
+  return el as T;
 }
 
-function ensureBackgroundCircles() {
-  let group = launcher.querySelector('#vo-circle-group');
+function ensureBackgroundCircles(): HTMLElement {
+  let group = launcher.querySelector<HTMLElement>('#vo-circle-group');
   if (!group) {
     group = document.createElement('div');
     group.id = 'vo-circle-group';
     group.className = 'vo-circle-group';
   }
   const classes = ['vo-circle-small','vo-circle-medium','vo-circle-large','vo-circle-xlarge','vo-circle-xxlarge'];
-  const children = [];
+  const children: HTMLElement[] = [];
   for (const cls of classes) {
-    let el = group.querySelector(`.${cls}`);
+    let el = group.querySelector<HTMLElement>(`.${cls}`);
     if (!el) {
       el = document.createElement('div');
       el.className = `vo-bg-circle ${cls}`;
@@ -43,9 +40,9 @@ function openLauncher() {
   addLeftButtons();
 }
 
-function openPortfolio(project) {
+function openPortfolio(project: { url: string; title?: string; details?: string }) {
   const { url, title, details } = project;
-  byId('app-name').textContent = title || 'Portfolio';
+  byId<HTMLDivElement>('app-name').textContent = title || 'Portfolio';
   drawerContent.innerHTML = details || '';
   frame.src = url;
   launcher.classList.add('hidden');
@@ -76,9 +73,9 @@ function openPortfolio(project) {
   }, { once: true });
 }
 
-function getThumbnail(item) {
-  if (item.image) return item.image;
-  const link = item.link || item.url || '';
+function getThumbnail(item: any): string {
+  if (item.image) return item.image as string;
+  const link = (item.link || item.url || '') as string;
   if (!link) return '';
   try {
     const u = new URL(link);
@@ -91,11 +88,11 @@ function toggleDrawer() {
   drawer.setAttribute('aria-hidden', String(!isOpen));
 }
 
-function storageKey(name) { return `vo.cache.${name}`; }
-function isStale(entryTs, maxAgeMs) { return !entryTs || (Date.now() - entryTs) > maxAgeMs; }
+function storageKey(name: string) { return `vo.cache.${name}`; }
+function isStale(entryTs: number, maxAgeMs: number) { return !entryTs || (Date.now() - entryTs) > maxAgeMs; }
 
-async function fetchWithWeeklyCache(name, url, maxAgeMs) {
-  const isLocalDataFile = typeof url === 'string' && (url.startsWith('/api/') || url.startsWith('api/'));
+async function fetchWithWeeklyCache<T>(name: string, url: string, maxAgeMs: number): Promise<T> {
+  const isLocalDataFile = typeof url === 'string' && (url.startsWith('/data/') || url.startsWith('data/'));
   const resolvedUrl = isLocalDataFile ? `${url.startsWith('/') ? url : '/' + url}?v=${Date.now()}` : url;
   if (isLocalDataFile) {
     const res = await fetch(resolvedUrl, { cache: 'no-store' });
@@ -104,15 +101,15 @@ async function fetchWithWeeklyCache(name, url, maxAgeMs) {
   const key = storageKey(name);
   try {
     const cached = JSON.parse(localStorage.getItem(key) || 'null');
-    if (cached && !isStale(cached.ts, maxAgeMs)) return cached.data;
+    if (cached && !isStale(cached.ts, maxAgeMs)) return cached.data as T;
   } catch {}
   const res = await fetch(resolvedUrl, { cache: 'no-store' });
   const data = await res.json();
   localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
-  return data;
+  return data as T;
 }
 
-function renderGallery(items) {
+function renderGallery(items: any[]) {
   const grid = document.createElement('div');
   grid.className = 'vo-gallery-grid';
   for (const item of items) {
@@ -132,7 +129,7 @@ function renderGallery(items) {
           <div class="vo-card-desc">${item.description || ''}</div>
         </div>`;
     card.addEventListener('click', (e) => {
-      const actionEl = e.target.closest('[data-action]');
+      const actionEl = (e.target as HTMLElement).closest('[data-action]') as HTMLElement | null;
       const action = actionEl ? actionEl.getAttribute('data-action') : 'launch';
       if (action === 'overview') {
         drawerContent.innerHTML = item.details || '';
@@ -147,9 +144,9 @@ function renderGallery(items) {
   return grid;
 }
 
-async function showCollection(kind) {
-  const data = await fetchWithWeeklyCache(kind, DATA_SOURCES[kind], REFRESH_INTERVAL_MS);
-  let items = data.items || [];
+async function showCollection(kind: 'portfolio' | 'experiments') {
+  const data = await fetchWithWeeklyCache<any>(kind, DATA_SOURCES[kind], REFRESH_INTERVAL_MS);
+  let items: any[] = data.items || [];
   if (items.length && items[0].type) {
     items = items.filter((it) => (kind === 'portfolio' ? it.type === 'Client Work' : it.type === 'Experiment'));
   }
@@ -175,14 +172,14 @@ function addLeftButtons() {
     `;
   launcher.appendChild(buttons);
   launcher.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-collection]');
+    const b = (e.target as HTMLElement).closest('[data-collection]') as HTMLElement | null;
     if (!b) return;
-    showCollection(b.getAttribute('data-collection'));
+    showCollection(b.getAttribute('data-collection') as 'portfolio' | 'experiments');
   });
 }
 
-// Build static structure
-const appRoot = document.getElementById('app');
+// Build static structure via TS rather than static HTML to keep one codepath
+const appRoot = document.getElementById('app')!;
 appRoot.innerHTML = `
   <main class="vo-main">
     <section id="launcher" class="vo-launcher" role="list">
@@ -194,7 +191,7 @@ appRoot.innerHTML = `
         <div class="vo-bg-circle vo-circle-xxlarge"></div>
         <div class="vo-noise"></div>
       </div>
-      <img id="cc-logo" class="vo-logo" src="./assets/CCLogo.svg" alt="Creative Corner logo" />
+      <img id="cc-logo" class="vo-logo" src="/assets/CCLogo.svg" alt="Creative Corner logo" />
     </section>
     <section id="app-viewport" class="vo-viewport hidden" aria-live="polite">
       <div class="vo-appbar">
@@ -216,15 +213,15 @@ appRoot.innerHTML = `
   <div class="vo-version" aria-label="Version">v0.1.1</div>
 `;
 
-const launcher = byId('launcher');
-const viewport = byId('app-viewport');
-const btnExit = byId('btn-exit-app');
-const btnToggleDrawer = byId('btn-toggle-drawer');
-const content = document.querySelector('.vo-content');
-const drawer = byId('drawer');
-const frame = byId('portfolio-frame');
-const drawerContent = byId('drawer-content');
-const logo = byId('cc-logo');
+const launcher = byId<HTMLElement>('launcher');
+const viewport = byId<HTMLElement>('app-viewport');
+const btnExit = byId<HTMLButtonElement>('btn-exit-app');
+const btnToggleDrawer = byId<HTMLButtonElement>('btn-toggle-drawer');
+const content = document.querySelector('.vo-content') as HTMLElement;
+const drawer = byId<HTMLElement>('drawer');
+const frame = byId<HTMLIFrameElement>('portfolio-frame');
+const drawerContent = byId<HTMLDivElement>('drawer-content');
+const logo = byId<HTMLImageElement>('cc-logo');
 
 btnExit.addEventListener('click', openLauncher);
 btnToggleDrawer.addEventListener('click', toggleDrawer);
@@ -240,6 +237,7 @@ window.addEventListener('keydown', (e) => {
 openLauncher();
 addLeftButtons();
 
+
 // Design controls for background waves
 function createControls() {
   const panel = document.createElement('div');
@@ -253,11 +251,12 @@ function createControls() {
   `;
   document.body.appendChild(panel);
 
-  const controls = [
-    { input: panel.querySelector('#ctl-bright'), out: panel.querySelector('#out-bright'), varName: '--vo-brightness' },
-    { input: panel.querySelector('#ctl-base'), out: panel.querySelector('#out-base'), varName: '--vo-base-scale' },
-    { input: panel.querySelector('#ctl-opacity'), out: panel.querySelector('#out-opacity'), varName: '--vo-circle-opacity' },
-    { input: panel.querySelector('#ctl-noise'), out: panel.querySelector('#out-noise'), varName: '--vo-noise' },
+  type Ctl = { input: HTMLInputElement; out: HTMLOutputElement; varName: string };
+  const controls: Ctl[] = [
+    { input: panel.querySelector('#ctl-bright') as HTMLInputElement, out: panel.querySelector('#out-bright') as HTMLOutputElement, varName: '--vo-brightness' },
+    { input: panel.querySelector('#ctl-base') as HTMLInputElement, out: panel.querySelector('#out-base') as HTMLOutputElement, varName: '--vo-base-scale' },
+    { input: panel.querySelector('#ctl-opacity') as HTMLInputElement, out: panel.querySelector('#out-opacity') as HTMLOutputElement, varName: '--vo-circle-opacity' },
+    { input: panel.querySelector('#ctl-noise') as HTMLInputElement, out: panel.querySelector('#out-noise') as HTMLOutputElement, varName: '--vo-noise' },
   ];
 
   const rootStyle = document.documentElement.style;
@@ -272,4 +271,4 @@ function createControls() {
   }
 }
 
-createControls(); // Show controls
+// createControls(); // Hidden for production
