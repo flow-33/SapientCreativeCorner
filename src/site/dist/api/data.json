@@ -1,0 +1,85 @@
+{
+  "items": [
+    {
+      "type": "Client Work",
+      "title": "Diriyah Gate",
+      "industry": "Real Estate Development",
+      "year": 2024,
+      "author": "Hiba Mojabber",
+      "contact": "you@creativecorner.example",
+      "link": "https://www.diriyah.sa/en",
+      "url": "https://www.diriyah.sa/en",
+      "image": "",
+      "thumbnail": "",
+      "description": "Diriyah Gate is a luxury residential development in Riyadh, Saudi Arabia.",
+      "details": "<p>Diriyah Gate represents a new era of luxury living in the heart of Saudi Arabia's capital. This prestigious development combines traditional Saudi architecture with modern amenities, creating a unique residential experience that honors the rich cultural heritage of Diriyah while providing contemporary comfort and convenience.</p><p>The project features state-of-the-art facilities, world-class design, and a prime location that offers residents unparalleled access to Riyadh's business and cultural districts.</p>"
+    },
+    {
+      "type": "Client Work",
+      "title": "New Murabba",
+      "industry": "Urban Development",
+      "year": 2024,
+      "author": "Flow Fournier",
+      "contact": "you@creativecorner.example",
+      "link": "https://www.newmurabba.com",
+      "url": "https://www.newmurabba.com",
+      "image": "",
+      "thumbnail": "",
+      "description": "Landing site. Replace with real project details and imagery.",
+      "details": "<p>New Murabba is a groundbreaking urban development project that reimagines the future of city living. This innovative project combines sustainable design principles with cutting-edge technology to create a model for 21st-century urban development.</p><p>The development features smart city infrastructure, green building technologies, and a focus on community-centered design that prioritizes both environmental sustainability and human well-being.</p>"
+    },
+    {
+      "type": "Client Work",
+      "title": "Creative Corner Home",
+      "industry": "Creative Studio",
+      "year": 2025,
+      "author": "Creative Team",
+      "contact": "you@creativecorner.example",
+      "link": "https://example.com",
+      "url": "https://example.com",
+      "image": "",
+      "thumbnail": "",
+      "description": "Landing site. Replace with real project details and imagery.",
+      "details": "<p>Creative Corner Home represents our studio's flagship project, showcasing our design philosophy and technical capabilities. This project demonstrates our ability to create engaging digital experiences that balance aesthetic appeal with functional excellence.</p><p>The site features responsive design, smooth animations, and an intuitive user interface that reflects our commitment to creating memorable digital experiences.</p>"
+    },
+    {
+      "type": "Experiment",
+      "title": "Instrument Playground",
+      "year": 2024,
+      "author": "Google Arts & Culture Lab",
+      "contact": "lab@creativecorner.example",
+      "link": "https://experiments.withgoogle.com/collection/ai",
+      "url": "https://experiments.withgoogle.com/collection/ai",
+      "image": "",
+      "thumbnail": "",
+      "description": "Generate, play and compose music inspired by instruments across the globe.",
+      "details": "<p>Instrument Playground is an experimental web application that explores the intersection of artificial intelligence and music creation. Users can generate, play, and compose music inspired by traditional instruments from cultures around the world.</p><p>This project demonstrates the potential of AI to bridge cultural gaps through music, allowing users to discover and experiment with sounds and rhythms from different traditions in an intuitive, interactive environment.</p>"
+    },
+    {
+      "type": "Experiment",
+      "title": "Virtual OS Interface",
+      "year": 2024,
+      "author": "Creative Team",
+      "contact": "lab@creativecorner.example",
+      "link": "https://github.com/flow-33/SapientCreativeCorner",
+      "url": "https://github.com/flow-33/SapientCreativeCorner",
+      "image": "",
+      "thumbnail": "",
+      "description": "A creative exploration of desktop-like interfaces in the browser, featuring animated backgrounds and interactive controls.",
+      "details": "<p>This experiment reimagines the traditional desktop interface for the web, creating an immersive experience that combines the familiarity of desktop computing with the fluidity of modern web technologies.</p><p>Features include animated background elements, real-time control panels, and a portfolio showcase that demonstrates how creative interfaces can enhance user engagement and provide unique ways to present content.</p>"
+    },
+    {
+      "type": "Experiment",
+      "title": "Flow State Generator",
+      "year": 2024,
+      "author": "Innovation Lab",
+      "contact": "lab@creativecorner.example",
+      "link": "https://example.com/flow-state",
+      "url": "https://example.com/flow-state",
+      "image": "",
+      "thumbnail": "",
+      "description": "An interactive tool for generating creative flow states through visual and audio stimuli.",
+      "details": "<p>Flow State Generator explores the psychological concept of 'flow' - that optimal state of consciousness where people feel their best and perform their best. This experimental tool uses visual patterns, ambient sounds, and interactive elements to help users enter and maintain flow states.</p><p>The project combines principles from psychology, design, and technology to create an engaging experience that supports creativity and focus.</p>"
+    }
+  ]
+}
