@@ -1,10 +1,11 @@
 name: Deploy Site (Simple)
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'src/site/**'
+  # Disabled - using main deploy.yml instead
+  # push:
+  #   branches: [ main ]
+  #   paths:
+  #     - 'src/site/**'
   workflow_dispatch:
 
 jobs:

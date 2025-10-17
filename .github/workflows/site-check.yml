@@ -1,14 +1,16 @@
 name: Site Check
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'src/site/**'
-  pull_request:
-    branches: [ main ]
-    paths:
-      - 'src/site/**'
+  # Disabled - using main deploy.yml instead
+  # push:
+  #   branches: [ main ]
+  #   paths:
+  #     - 'src/site/**'
+  # pull_request:
+  #   branches: [ main ]
+  #   paths:
+  #     - 'src/site/**'
+  workflow_dispatch:
 
 jobs:
   check:
