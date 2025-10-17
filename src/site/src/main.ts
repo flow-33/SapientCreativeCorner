@@ -197,7 +197,7 @@ appRoot.innerHTML = `
         <div class="vo-bg-circle vo-circle-xxlarge"></div>
         <div class="vo-noise"></div>
       </div>
-      <img id="cc-logo" class="vo-logo" src="/assets/CCLogo.svg" alt="Creative Corner logo" />
+      <img id="cc-logo" class="vo-logo" src="./assets/CCLogo.svg" alt="Creative Corner logo" />
     </section>
     <section id="app-viewport" class="vo-viewport hidden" aria-live="polite">
       <div class="vo-appbar">
