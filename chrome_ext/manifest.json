@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Creative Corner Navigation",
+  "version": "1.0.0",
+  "description": "Floating navigation buttons for Creative Corner site navigation",
+  "permissions": [
+    "tabs",
+    "storage",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "exclude_matches": [
+        "https://flow-33.github.io/SapientCreativeCorner/*",
+        "http://localhost/*",
+        "https://localhost/*",
+        "http://127.0.0.1/*",
+        "https://127.0.0.1/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "icons": {
+    "16": "icon16.svg",
+    "48": "icon48.svg",
+    "128": "icon128.svg"
+  }
+}
