@@ -92,10 +92,12 @@ function storageKey(name: string) { return `vo.cache.${name}`; }
 function isStale(entryTs: number, maxAgeMs: number) { return !entryTs || (Date.now() - entryTs) > maxAgeMs; }
 
 async function fetchWithWeeklyCache<T>(name: string, url: string, maxAgeMs: number): Promise<T> {
-  const isLocalDataFile = typeof url === 'string' && (url.startsWith('/data/') || url.startsWith('data/'));
+  const isLocalDataFile = typeof url === 'string' && (url.startsWith('/data/') || url.startsWith('data/') || url.startsWith('/api/') || url.startsWith('api/'));
   const resolvedUrl = isLocalDataFile ? `${url.startsWith('/') ? url : '/' + url}?v=${Date.now()}` : url;
+  console.log(`Fetching from: ${resolvedUrl}`);
   if (isLocalDataFile) {
     const res = await fetch(resolvedUrl, { cache: 'no-store' });
+    console.log('API response status:', res.status);
     return await res.json();
   }
   const key = storageKey(name);
@@ -145,11 +147,15 @@ function renderGallery(items: any[]) {
 }
 
 async function showCollection(kind: 'portfolio' | 'experiments') {
+  console.log(`Loading ${kind} from:`, DATA_SOURCES[kind]);
   const data = await fetchWithWeeklyCache<any>(kind, DATA_SOURCES[kind], REFRESH_INTERVAL_MS);
+  console.log('Loaded data:', data);
   let items: any[] = data.items || [];
+  console.log('Items before filter:', items.length);
   if (items.length && items[0].type) {
     items = items.filter((it) => (kind === 'portfolio' ? it.type === 'Client Work' : it.type === 'Experiment'));
   }
+  console.log('Items after filter:', items.length);
   launcher.replaceChildren();
   const back = document.createElement('button');
   back.className = 'vo-back';
@@ -271,4 +277,9 @@ function createControls() {
   }
 }
 
-// createControls(); // Hidden for production
+createControls(); // Show controls
+
+// Debug: Check if elements exist
+console.log('Background circles:', document.querySelectorAll('.vo-bg-circle').length);
+console.log('Controls panel:', document.querySelector('.vo-controls'));
+console.log('Circle group:', document.querySelector('#vo-circle-group'));
