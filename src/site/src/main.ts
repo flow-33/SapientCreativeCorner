@@ -98,6 +98,9 @@ async function fetchWithWeeklyCache<T>(name: string, url: string, maxAgeMs: numb
   if (isLocalDataFile) {
     const res = await fetch(resolvedUrl, { cache: 'no-store' });
     console.log('API response status:', res.status);
+    if (!res.ok) {
+      throw new Error(`API request failed: ${res.status} ${res.statusText}`);
+    }
     return await res.json();
   }
   const key = storageKey(name);
