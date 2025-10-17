@@ -216,9 +216,11 @@
   // Create animated background (only once)
   function createAnimatedBackground() {
     const launcher = document.getElementById('launcher');
+    console.log('Creating animated background...', launcher);
     
     // Check if background already exists
     if (launcher.querySelector('.vo-bg-circle')) {
+      console.log('Background already exists, skipping...');
       return;
     }
     
@@ -236,12 +238,16 @@
       circleEl.className = `vo-bg-circle ${circle.class}`;
       circleEl.style.animationDelay = `${circle.delay}s`;
       launcher.appendChild(circleEl);
+      console.log('Added circle:', circle.class);
     });
     
     // Add noise overlay
     const noise = document.createElement('div');
     noise.className = 'vo-noise';
     launcher.appendChild(noise);
+    console.log('Added noise overlay');
+    
+    console.log('Background creation complete. Total circles:', launcher.querySelectorAll('.vo-bg-circle').length);
   }
 
   // Create animation controls
@@ -279,6 +285,10 @@
   // Start at launcher
   openLauncher();
   addLeftButtons();
-  createAnimatedBackground();
-  createControls(); // Uncomment this line to show controls
+  
+  // Add a small delay to ensure DOM is ready
+  setTimeout(() => {
+    createAnimatedBackground();
+    createControls(); // Uncomment this line to show controls
+  }, 100);
 })();
