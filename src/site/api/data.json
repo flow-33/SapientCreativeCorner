@@ -13,6 +13,17 @@
         "details": "<p>Case study content here.</p>"
       },
       {
+        "type": "Client Work",
+        "title": "Creative Corner Home",
+        "industry": "Creative Studio",
+        "year": 2025,
+        "contact": "you@creativecorner.example",
+        "link": "https://example.com",
+        "image": "",
+        "description": "Landing site. Replace with real project details and imagery.",
+        "details": "<p>Case study content here.</p>"
+      },
+      {
         "type": "Experiment",
         "title": "Instrument Playground",
         "year": 2024,
