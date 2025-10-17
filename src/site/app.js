@@ -1,0 +1,206 @@
+(() => {
+  // Config is exposed on window by app-config.js module
+  async function loadConfig() { return window.__VO_CFG__; }
+  const launcher = document.getElementById('launcher');
+  const viewport = document.getElementById('app-viewport');
+  const btnExit = document.getElementById('btn-exit-app');
+  const btnToggleDrawer = document.getElementById('btn-toggle-drawer');
+  const content = document.querySelector('.vo-content');
+  const drawer = document.getElementById('drawer');
+  const frame = document.getElementById('portfolio-frame');
+  const drawerContent = document.getElementById('drawer-content');
+  const logo = document.getElementById('cc-logo');
+
+  function openLauncher() {
+    viewport.classList.add('hidden');
+    launcher.classList.remove('hidden');
+    // Reset drawer
+    content.classList.remove('drawer-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    frame.src = '';
+    // Rebuild launcher content: keep logo and add buttons
+    if (logo && logo.parentElement !== launcher) {
+      launcher.appendChild(logo);
+    }
+    launcher.replaceChildren(logo);
+    addLeftButtons();
+  }
+
+  function openPortfolio(project) {
+    const { url, title, details } = project;
+    document.getElementById('app-name').textContent = title || 'Portfolio';
+    drawerContent.innerHTML = details || '';
+    frame.src = url;
+    launcher.classList.add('hidden');
+    viewport.classList.remove('hidden');
+
+    // Fallback notice if a site blocks iframing (e.g., X-Frame-Options/CSP)
+    const failNoticeId = 'vo-load-fail';
+    let cleared = false;
+    const showFail = () => {
+      if (cleared) return;
+      let notice = document.getElementById(failNoticeId);
+      if (!notice) {
+        notice = document.createElement('div');
+        notice.id = failNoticeId;
+        notice.className = 'vo-fail';
+        notice.innerHTML = `<div style="display:grid;gap:8px;text-align:center">
+          <div style="font-weight:600">This site may block embedding in an app</div>
+          <a href="${url}" target="_blank" rel="noopener" class="vo-cta" style="justify-self:center">Open in browser</a>
+        </div>`;
+        viewport.appendChild(notice);
+      }
+    };
+    const timer = setTimeout(showFail, 3000);
+    frame.addEventListener('load', () => {
+      cleared = true;
+      clearTimeout(timer);
+      const existing = document.getElementById(failNoticeId);
+      if (existing) existing.remove();
+    }, { once: true });
+  }
+
+  function getThumbnail(item) {
+    if (item.image) return item.image;
+    const link = item.link || item.url || '';
+    if (!link) return '';
+    try {
+      const u = new URL(link);
+      return `https://www.google.com/s2/favicons?sz=256&domain=${u.hostname}`;
+    } catch { return ''; }
+  }
+
+  function toggleDrawer() {
+    const isOpen = content.classList.toggle('drawer-open');
+    drawer.setAttribute('aria-hidden', String(!isOpen));
+  }
+
+  // Demo data for now; replace with real portfolio entries later
+  const defaultProject = {
+    title: 'Flow Portfolio',
+    url: 'https://flow-33.github.io/SapientCreativeCorner/',
+    details: '<p><strong>Role:</strong> Design & Development</p><p><strong>Team:</strong> Flow Team</p><p><strong>Notes:</strong> This is the main Flow portfolio showcasing creative experiments and client work.</p>',
+  };
+
+  launcher.addEventListener('click', (e) => {
+    const tile = e.target.closest('[data-app]');
+    if (!tile) return;
+    const app = tile.getAttribute('data-app');
+    if (app === 'portfolio') {
+      openPortfolio(defaultProject);
+    }
+  });
+
+  btnExit.addEventListener('click', openLauncher);
+  btnToggleDrawer.addEventListener('click', toggleDrawer);
+
+  // Basic keyboard shortcuts
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' || (e.key.toLowerCase() === 'h' && !e.metaKey)) {
+      openLauncher();
+    } else if (e.key.toLowerCase() === 'd') {
+      if (!viewport.classList.contains('hidden')) toggleDrawer();
+    }
+  });
+
+  function storageKey(name) { return `vo.cache.${name}`; }
+  function isStale(entryTs, maxAgeMs) { return !entryTs || (Date.now() - entryTs) > maxAgeMs; }
+
+  async function fetchWithWeeklyCache(name, url, maxAgeMs) {
+    // For local JSON inside api/, bypass cache to reflect immediate edits
+    const isLocalDataFile = typeof url === 'string' && url.startsWith('api/');
+    if (isLocalDataFile) {
+      const res = await fetch(`${url}?v=${Date.now()}`, { cache: 'no-store' });
+      return await res.json();
+    }
+    const key = storageKey(name);
+    try {
+      const cached = JSON.parse(localStorage.getItem(key) || 'null');
+      if (cached && !isStale(cached.ts, maxAgeMs)) return cached.data;
+    } catch {}
+    const res = await fetch(url, { cache: 'no-store' });
+    const data = await res.json();
+    localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
+    return data;
+  }
+
+  function renderGallery(items) {
+    const grid = document.createElement('div');
+    grid.className = 'vo-gallery-grid';
+    for (const item of items) {
+      const card = document.createElement('button');
+      card.className = 'vo-card';
+      const thumb = getThumbnail(item) || item.thumbnail || '';
+      card.innerHTML = `
+        <div class="vo-card-thumb" style="background-image:url('${thumb}')">
+          <div class="vo-card-overlay">
+            <button class="vo-cta" data-action="launch">${item.type === 'Client Work' ? 'View Work' : 'Launch Experiment'}</button>
+            <button class="vo-cta secondary" data-action="overview">${item.type === 'Client Work' ? 'Case Study' : 'Overview'}</button>
+          </div>
+        </div>
+        <div class="vo-card-meta">
+          <div class="vo-card-title">${item.title || 'Untitled'}</div>
+          <div class="vo-card-sub">${item.type === 'Client Work' ? (item.industry || '') : (item.author || '')}</div>
+          <div class="vo-card-desc">${item.description || ''}</div>
+        </div>`;
+      card.addEventListener('click', (e) => {
+        const actionEl = e.target.closest('[data-action]');
+        const action = actionEl ? actionEl.getAttribute('data-action') : 'launch';
+        if (action === 'overview') {
+          // Open details drawer only
+          drawerContent.innerHTML = item.details || '';
+          content.classList.add('drawer-open');
+          drawer.setAttribute('aria-hidden', 'false');
+        } else {
+          openPortfolio({ url: item.link || item.url, title: item.title, details: item.details });
+        }
+      });
+      grid.appendChild(card);
+    }
+    return grid;
+  }
+
+  async function showCollection(kind) {
+    const { REFRESH_INTERVAL_MS, DATA_SOURCES } = await loadConfig();
+    const data = await fetchWithWeeklyCache(kind, DATA_SOURCES[kind], REFRESH_INTERVAL_MS);
+    let items = data.items || [];
+    // If the file is a unified knowledge base shape, filter by type; otherwise use as-is
+    if (items.length && items[0].type) {
+      items = items.filter((it) => (kind === 'portfolio' ? it.type === 'Client Work' : it.type === 'Experiment'));
+    }
+    // Reuse viewport drawer and iframe; replace launcher with gallery
+    launcher.replaceChildren();
+    // Back home control
+    const back = document.createElement('button');
+    back.className = 'vo-back';
+    back.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg><span>Home</span>';
+    back.addEventListener('click', openLauncher);
+    launcher.appendChild(back);
+    const header = document.createElement('div');
+    header.className = 'vo-collection-header';
+    header.textContent = kind === 'portfolio' ? 'Portfolio' : 'Experiments';
+    launcher.appendChild(header);
+    launcher.appendChild(renderGallery(items));
+  }
+
+  // Wire launcher buttons (now three: portfolio, experiments, and knowledge)
+  function addLeftButtons() {
+    const buttons = document.createElement('div');
+    buttons.className = 'vo-left-buttons';
+    buttons.innerHTML = `
+      <button class="vo-circle" data-collection="portfolio"><span>Portfolio</span></button>
+      <button class="vo-circle alt" data-collection="experiments"><span>Experiments</span></button>
+      <button class="vo-circle" data-collection="knowledge"><span>Knowledge</span></button>
+    `;
+    launcher.appendChild(buttons);
+    launcher.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-collection]');
+      if (!b) return;
+      showCollection(b.getAttribute('data-collection'));
+    });
+  }
+
+  // Start at launcher
+  openLauncher();
+  addLeftButtons();
+})();

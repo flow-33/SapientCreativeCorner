@@ -7,6 +7,13 @@ This directory contains the static site files for the Flow project, designed to 
 ```
 src/site/
 ├── index.html          # Main demo page
+├── app.html           # Full web app (Electron app port)
+├── app.css            # App styling
+├── app.js             # App functionality
+├── app-config.js      # App configuration
+├── assets/            # Images and assets
+│   ├── CCLogo.png
+│   └── creative-corner-bg.png
 ├── api/               # API endpoints
 │   ├── data.json      # Combined data endpoint
 │   ├── portfolio.json # Portfolio data
@@ -18,6 +25,7 @@ src/site/
 ## Features
 
 - **Demo HTML Page**: Interactive showcase of the Flow project data
+- **Full Web App**: Complete port of the Electron app to web (`app.html`)
 - **API Endpoints**: JSON data accessible via `/api/*.json` endpoints
 - **Responsive Design**: Mobile-first approach with clean, modern UI
 - **GitHub Pages Ready**: Configured for automatic deployment
