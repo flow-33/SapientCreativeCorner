@@ -80,6 +80,19 @@
       "thumbnail": "",
       "description": "An interactive tool for generating creative flow states through visual and audio stimuli.",
       "details": "<p>Flow State Generator explores the psychological concept of 'flow' - that optimal state of consciousness where people feel their best and perform their best. This experimental tool uses visual patterns, ambient sounds, and interactive elements to help users enter and maintain flow states.</p><p>The project combines principles from psychology, design, and technology to create an engaging experience that supports creativity and focus.</p>"
+    },
+    {
+      "type": "Experiment",
+      "title": "Workflow Editor",
+      "year": 2024,
+      "author": "Pretheesh Thomas",
+      "contact": "lab@creativecorner.example",
+      "link": "https://approval-workflow-647930923087.us-central1.run.app/",
+      "url": "https://approval-workflow-647930923087.us-central1.run.app/",
+      "image": "",
+      "thumbnail": "",
+      "description": "Generate, Visual workflows with IFTTT conditions",
+      "details": "<p>This is a POC for approval workflows for complemx mandates for ADCB corporate banking. </p>"
     }
   ]
 }
